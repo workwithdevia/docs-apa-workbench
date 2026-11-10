@@ -1,0 +1,15 @@
+# uv-managed Python environment and caches.
+.venv/
+.uv/
+__pycache__/
+*.py[cod]
+
+# Typst outputs and caches.
+*.pdf
+.typst-cache/
+.cache/
+*.png.tmp
+*.svg.tmp
+
+# OS/editor files.
+.DS_Store

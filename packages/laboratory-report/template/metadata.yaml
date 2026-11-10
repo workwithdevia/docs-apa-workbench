@@ -1,0 +1,18 @@
+# Document metadata. Edit these values for each experiment.
+title: "DNA Extraction"
+authors:
+  - "First Author"
+  - "Second Author"
+institution: "University Name"
+faculty: "Faculty Name"
+program: "Degree Program"
+course: "General Biology"
+instructor: "Instructor Name"
+date: "10 November 2026"
+laboratory: "Biology Laboratory"
+practice: "Experiment 1: DNA Extraction"
+group: "01"
+keywords:
+  - "DNA"
+  - "extraction"
+  - "laboratory"

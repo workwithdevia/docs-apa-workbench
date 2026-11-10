@@ -1,0 +1,29 @@
+language: "es"
+page:
+  paper: "us-letter"
+  margin-in: 1
+  page-numbers: true
+typography:
+  text:
+    font: "New Computer Modern"
+    size-pt: 10
+    top-edge-em: 0.8
+    bottom-edge-em: -0.2
+  math:
+    font: "New Computer Modern Math"
+  code:
+    font: "DejaVu Sans Mono"
+    inline-size-em: 0.85
+    block-size-pt: 9
+  paragraph:
+    justify: false
+    leading-em: 1
+    spacing-em: 1
+    first-line-indent-in: 0.5
+    heading-leading-em: 1
+    heading-spacing-em: 1
+cover:
+  top-space-em: 3
+bibliography:
+  style: "apa"
+  full: false

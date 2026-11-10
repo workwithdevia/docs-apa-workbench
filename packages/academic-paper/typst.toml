@@ -1,0 +1,16 @@
+[package]
+name = "nexum-apa-paper"
+version = "0.1.0"
+entrypoint = "lib.typ"
+authors = ["YOUR NAME <@YOUR_GITHUB_HANDLE>"]
+license = "MIT"
+repository = "https://github.com/YOUR_GITHUB_USER/apa-workbench"
+description = "Write APA-style academic research papers."
+compiler = "0.15.0"
+keywords = ["apa", "research", "academic", "paper", "student"]
+categories = ["paper"]
+
+[template]
+path = "template"
+entrypoint = "main.typ"
+thumbnail = "thumbnail.png"

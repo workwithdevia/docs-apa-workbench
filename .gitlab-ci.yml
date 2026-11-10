@@ -1,0 +1,69 @@
+# GitLab CI for APA Workbench.
+# Runs the same checks as scripts/test-local.sh and keeps compiled PDFs as artifacts.
+
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS'
+      when: never
+    - if: '$CI_COMMIT_BRANCH'
+    - if: '$CI_COMMIT_TAG'
+
+stages:
+  - test
+
+default:
+  image:
+    name: nixos/nix:2.35.5
+    entrypoint: [""]
+  interruptible: true
+  cache:
+    key: "${CI_PROJECT_NAME}-${CI_COMMIT_REF_SLUG}"
+    paths:
+      - .cache/uv/
+    policy: pull-push
+
+variables:
+  # Enable flakes in the official Nix container.
+  NIX_CONFIG: |-
+    experimental-features = nix-command flakes
+    accept-flake-config = true
+
+  # Keep uv's download cache inside the GitLab project directory.
+  UV_CACHE_DIR: "$CI_PROJECT_DIR/.cache/uv"
+  UV_PROJECT_ENVIRONMENT: "$CI_PROJECT_DIR/.venv"
+  UV_LINK_MODE: "copy"
+  UV_PYTHON_DOWNLOADS: "never"
+  UV_NO_PROGRESS: "1"
+
+validate-and-build:
+  stage: test
+  script:
+    - |
+      nix develop --command bash -euo pipefail -c '
+        echo "== Toolchain =="
+        nix --version
+        typst --version
+        uv --version
+        python --version
+
+        echo "== Static checks and four compilation tests =="
+        ./scripts/test-local.sh
+
+        echo "== Build downloadable example PDFs =="
+        export XDG_DATA_HOME="$CI_PROJECT_DIR/.ci/xdg"
+        ./scripts/install-local-packages.sh
+        mkdir -p build
+
+        typst compile --root "$CI_PROJECT_DIR" \
+          examples/academic-paper/main.typ build/academic-paper.pdf
+
+        typst compile --root "$CI_PROJECT_DIR" \
+          examples/dna-extraction/main.typ build/dna-extraction.pdf
+      '
+  artifacts:
+    when: always
+    expire_in: 1 week
+    paths:
+      - build/academic-paper.pdf
+      - build/dna-extraction.pdf

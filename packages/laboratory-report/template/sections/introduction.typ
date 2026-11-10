@@ -1,0 +1,1 @@
+Deoxyribonucleic acid (DNA) stores the hereditary information of living organisms. Introduce the scientific context of the experiment, explain why the process is relevant, and state the research purpose. Add citations where appropriate. Support the scientific background with a source, for example @example2024.
