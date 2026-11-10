@@ -47,4 +47,8 @@
   Se distribuyó el filtrado en una copa de vidrio, se añadieron aproximadamente 10 ml de zumo de piña y se mezcló con cuidado.
 
   Se inclinó la copa y se vertió lentamente el alcohol frío por la pared. Después de observar la zona de separación, se recogieron los filamentos con un copito.
+
+  Los criterios de evaluación de la práctica se
+  consultaron en la rúbrica suministrada para la
+  actividad @agudelo2026.
 ]

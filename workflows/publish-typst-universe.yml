@@ -1,0 +1,94 @@
+name: Validate and publish Typst packages
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+  # Re-check dependencies after Typst Packages merges the core PR.
+  schedule:
+    - cron: "23 */6 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: typst-universe-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  validate-and-build:
+    name: Validate and compile examples
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v5
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31.11.3
+        with:
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run repository checks and compile PDFs
+        shell: bash
+        run: |
+          set -euo pipefail
+          nix develop --command bash -euo pipefail -c '
+            echo "== Toolchain =="
+            nix --version
+            typst --version
+            uv --version
+            python --version
+
+            echo "== Static validation and four compilation tests =="
+            ./scripts/test-local.sh
+
+            echo "== Build downloadable example PDFs =="
+            export XDG_DATA_HOME="$RUNNER_TEMP/typst-data"
+            ./scripts/install-local-packages.sh
+            mkdir -p build
+
+            typst compile --root "$GITHUB_WORKSPACE" \
+              examples/academic-paper/main.typ build/academic-paper.pdf
+            typst compile --root "$GITHUB_WORKSPACE" \
+              examples/dna-extraction/main.typ build/dna-extraction.pdf
+          '
+
+      - name: Upload example PDFs
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: apa-workbench-example-pdfs
+          path: |
+            build/academic-paper.pdf
+            build/dna-extraction.pdf
+          if-no-files-found: error
+          retention-days: 7
+
+  publish-to-typst-universe:
+    name: Submit packages to Typst Universe
+    needs: validate-and-build
+    runs-on: ubuntu-latest
+    # Never publish from a pull-request build or from a non-main dispatch.
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v5
+
+      - name: Verify publishing credentials
+        env:
+          TYPST_PACKAGES_TOKEN: ${{ secrets.TYPST_PACKAGES_TOKEN }}
+        shell: bash
+        run: |
+          if [[ -z "$TYPST_PACKAGES_TOKEN" ]]; then
+            echo "::error::Add the TYPST_PACKAGES_TOKEN Actions secret before publishing."
+            exit 1
+          fi
+
+      - name: Publish new package versions and open/update Typst PRs
+        env:
+          TYPST_PACKAGES_TOKEN: ${{ secrets.TYPST_PACKAGES_TOKEN }}
+          TYPST_PACKAGES_FORK: workwithdevia/packages
+          TYPST_SOURCE_REPOSITORY: https://github.com/workwithdevia/docs-apa-workbench
+        run: python3 scripts/publish-to-typst-universe.py
