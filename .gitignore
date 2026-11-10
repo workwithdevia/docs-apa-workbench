@@ -13,3 +13,158 @@ __pycache__/
 
 # OS/editor files.
 .DS_Store
+
+
+# ============================================================
+# APA Workbench — Git ignore
+# Nix · Direnv · uv · Python · Typst · GitHub · GitLab
+# ============================================================
+
+
+# ------------------------------------------------------------
+# DIRENV
+# ------------------------------------------------------------
+
+# Keep .envrc tracked: shared `use flake` configuration.
+.direnv/
+.envrc.local
+.envrc.private
+
+
+# ------------------------------------------------------------
+# ENVIRONMENT VARIABLES AND SECRETS
+# ------------------------------------------------------------
+
+.env
+.env.*
+!.env.example
+!.env.template
+
+.secrets/
+secrets.local/
+
+*.secret
+*.token
+*.pem
+*.p12
+*.pfx
+
+
+# ------------------------------------------------------------
+# NIX
+# ------------------------------------------------------------
+
+# Keep flake.nix and flake.lock tracked.
+/result
+/result-*
+
+
+# ------------------------------------------------------------
+# UV / PYTHON
+# ------------------------------------------------------------
+
+# Keep pyproject.toml, uv.lock and .python-version tracked.
+.venv/
+venv/
+ENV/
+.uv/
+__pycache__/
+*.py[cod]
+*$py.class
+__pypackages__/
+
+# Tests, type checking and lint caches.
+.pytest_cache/
+.mypy_cache/
+.pyright/
+.ruff_cache/
+.pytype/
+.tox/
+.nox/
+.hypothesis/
+.ipynb_checkpoints/
+
+# Coverage and packaging outputs.
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+*.egg-info/
+.eggs/
+wheels/
+dist/
+pip-wheel-metadata/
+
+
+# ------------------------------------------------------------
+# TYPST
+# ------------------------------------------------------------
+
+# Build outputs.
+/ build/
+**/build/
+
+# Generated PDFs.
+# Intentional reference PDFs remain trackable in these locations.
+*.pdf
+!docs/**/*.pdf
+!examples/**/*.pdf
+!packages/**/assets/**/*.pdf
+
+# Local caches and temporary output.
+.typst-cache/
+.typst/
+.cache/
+*.png.tmp
+*.svg.tmp
+*.pdf.tmp
+
+
+# ------------------------------------------------------------
+# TEMPORARY FILES AND LOGS
+# ------------------------------------------------------------
+
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+*~
+
+
+# ------------------------------------------------------------
+# GITHUB ACTIONS LOCAL RUNNER
+# ------------------------------------------------------------
+
+.act/
+
+
+# ------------------------------------------------------------
+# EDITORS AND IDEs
+# ------------------------------------------------------------
+
+.idea/
+.fleet/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+
+# ------------------------------------------------------------
+# OPERATING SYSTEMS
+# ------------------------------------------------------------
+
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+
+# ------------------------------------------------------------
+# LOCAL TEST ARTIFACTS
+# ------------------------------------------------------------
+
+.test-output/
+.test-tmp/
